@@ -30,7 +30,7 @@ HEADERS = {
 
 # 네이버 쇼핑 EP 필드 순서
 EP_FIELDS = [
-    "id", "title", "price_pc", "link", "image",
+    "id", "title", "price_pc", "link", "mobile_link", "image",
     "category_name1", "category_name2", "shipping", "description"
 ]
 
@@ -169,11 +169,14 @@ def get_products(cat):
             if not god_id or not title or not price:
                 continue
 
+            mobile_link = link.replace("mntour.lottetour.com", "mmntour.lottetour.com")
+
             products.append({
                 "id":             god_id,
                 "title":          title,
                 "price_pc":       price,
                 "link":           link,
+                "mobile_link":    mobile_link,
                 "image":          image,
                 "category_name1": "여행",
                 "category_name2": cat["category_name2"],
