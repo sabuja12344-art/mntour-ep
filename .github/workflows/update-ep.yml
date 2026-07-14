@@ -1,0 +1,33 @@
+name: EP 자동 갱신
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # 매 시간 정각 자동 실행
+  workflow_dispatch:       # GitHub 사이트에서 수동 실행 버튼도 생김
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 가져오기
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install requests beautifulsoup4
+
+      - name: EP 생성 실행
+        run: python crawler.py
+
+      - name: ep.txt 커밋 & 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ep.txt
+          git diff --staged --quiet || git commit -m "EP 자동 갱신: $(date '+%Y-%m-%d %H:%M KST')"
+          git push
